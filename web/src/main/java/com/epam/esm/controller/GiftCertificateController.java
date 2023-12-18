@@ -1,5 +1,6 @@
 package com.epam.esm.controller;
 
+import com.epam.esm.dto.FilterRequest;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.exception.DaoException;
 import com.epam.esm.exceptions.IncorrectParameterException;
@@ -41,6 +42,11 @@ public class GiftCertificateController {
                                                     @RequestBody GiftCertificate certificate) throws DaoException, IncorrectParameterException {
         giftCertificateService.update(certificate,id);
         return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+    }
+
+    @PostMapping("/filter")
+    public List<GiftCertificate> filter(@RequestBody FilterRequest filterRequest) throws IncorrectParameterException, DaoException {
+        return giftCertificateService.doFilter(filterRequest);
     }
 
 }

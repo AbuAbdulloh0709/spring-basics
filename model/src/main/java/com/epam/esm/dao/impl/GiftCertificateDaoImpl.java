@@ -4,6 +4,7 @@ import com.epam.esm.dao.GiftCertificateDAO;
 import com.epam.esm.dao.TagDAO;
 import com.epam.esm.dao.mapper.GiftCertificateMapper;
 import com.epam.esm.dao.mapper.TagMapper;
+import com.epam.esm.dto.FilterRequest;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DaoException;
@@ -125,6 +126,18 @@ public class GiftCertificateDaoImpl implements GiftCertificateDAO {
         }
         if (updateCertificate.getTags() != null) {
             updateCertificateTags(updateCertificate);
+        }
+    }
+
+    @Override
+    public List<GiftCertificate> doFilter(FilterRequest filterRequest) throws DaoException {
+        try {
+            System.out.println(filterRequest.generateSqlQuery());
+            List<GiftCertificate> list = jdbcTemplate.query(filterRequest.generateSqlQuery(), rowMapper);
+            list.forEach(giftCertificate -> giftCertificate.setTags(getAccociatedTags(giftCertificate.getId())));
+            return list;
+        } catch (DataAccessException e) {
+            throw new DaoException(NO_ENTITY);
         }
     }
 

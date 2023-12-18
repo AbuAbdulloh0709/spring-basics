@@ -2,6 +2,7 @@ package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDAO;
 import com.epam.esm.dao.TagDAO;
+import com.epam.esm.dto.FilterRequest;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DaoException;
@@ -61,6 +62,12 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
 
         giftCertificateDAO.update(updateCertificate);
     }
+
+    @Override
+    public List<GiftCertificate> doFilter(FilterRequest filterRequest) throws DaoException {
+        return giftCertificateDAO.doFilter(filterRequest);
+    }
+
     private void saveNewTags(GiftCertificate item) throws DaoException {
         List<Tag> allTags = tagDAO.getAll();
         List<Tag> requestTags = item.getTags();
