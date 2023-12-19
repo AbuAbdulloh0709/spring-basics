@@ -61,19 +61,10 @@
                         <include>**/*Test.java</include>
                     </includes>
                     <excludes>
-                        <!-- Add any exclusion patterns if needed -->
                     </excludes>
+                </configuration>
+            </plugin>
 
-                    <!-- Other configuration options -->
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <parameters>true</parameters>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 

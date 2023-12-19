@@ -22,7 +22,7 @@ INSERT INTO gift_certificates (id, name, description, price, duration, create_da
 VALUES ('2', 'giftCertificate3', 'description3', 100.99, 3, '2019-10-20T07:20:15.156', '2019-10-20T07:20:15.156');
 
 INSERT INTO gift_certificates (id, name, description, price, duration, create_date, last_update_date)
-VALUES ('3', 'giftCertificate2', 'description2', 999.99, 2, '2018-10-20T07:20:15.156', '2018-10-20T07:20:15.156');
+VALUES ('3', 'giftCertificate21', 'description2', 999.99, 2, '2018-10-20T07:20:15.156', '2018-10-20T07:20:15.156');
 
 /* --------------filling in the table "gift_certificates_tags"---------------------*/
 

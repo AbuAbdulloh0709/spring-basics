@@ -1,5 +1,7 @@
 package com.epam.esm.dto;
 
+import java.util.Objects;
+
 public class FilterRequest {
     private String name;
     private String description;
@@ -43,37 +45,12 @@ public class FilterRequest {
             }
             sqlBuilder.append("description ILIKE '%").append(description).append("%' ");
         }
-        if (sorting != null && sorting.sortBy != null && sorting.sortOrder != null) {
-            sqlBuilder.append(" order by ").append(sorting.sortBy.equals("date") ? "create_date" : sorting.sortBy).append(" ").append(sorting.sortOrder);
+        if (sorting != null && sorting.getSortBy() != null && sorting.getSortOrder() != null) {
+            sqlBuilder.append(" order by ").append(sorting.getSortBy().equals("date") ? "create_date" : sorting.getSortBy()).append(" ").append(sorting.getSortOrder());
         }
 
         return sqlBuilder.toString();
     }
-
-
-    public class Sorting {
-        private String sortBy;
-        private String sortOrder;
-
-        public String getSortBy() {
-            return sortBy;
-        }
-
-        public void setSortBy(String sortBy) {
-            this.sortBy = sortBy;
-        }
-
-        public String getSortOrder() {
-            return sortOrder;
-        }
-
-        public void setSortOrder(String sortOrder) {
-            this.sortOrder = sortOrder;
-        }
-
-
-    }
-
 
     @Override
     public String toString() {

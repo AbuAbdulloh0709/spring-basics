@@ -70,11 +70,6 @@ public class TagDaoImpl implements TagDAO {
             throw new DaoException(SAVING_ERROR);
         }
     }
-//
-//    @Override
-//    public List<Tag> getWithFilters(Map<String, String> fields) throws DaoException {
-//        return null;
-//    }
 
     @Override
     public Tag getByName(String name) throws DaoException {
