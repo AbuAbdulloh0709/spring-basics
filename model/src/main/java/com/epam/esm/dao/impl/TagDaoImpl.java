@@ -64,9 +64,12 @@ public class TagDaoImpl implements TagDAO {
     @Override
     public void removeById(long id) throws DaoException {
         try {
-            jdbcTemplate.update(QUERY_DELETE_BY_ID, id);
+            if (getById(id)==null){
+                throw new DaoException(NO_ENTITY_WITH_ID);
+            } else {
+                jdbcTemplate.update(QUERY_DELETE_BY_ID, id);
+            }
         } catch (DataAccessException e) {
-            System.out.println(e.getLocalizedMessage());
             throw new DaoException(SAVING_ERROR);
         }
     }

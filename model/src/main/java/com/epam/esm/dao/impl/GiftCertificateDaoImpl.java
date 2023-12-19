@@ -40,6 +40,7 @@ public class GiftCertificateDaoImpl implements GiftCertificateDAO {
     private final String QUERY_DELETE_GC_BY_ID = "delete from gift_certificates where id = ?";
     private static final String QUERY_DELETE_ASSOCIATED_TAGS = "delete from gift_certificates_tags where gift_certificate_id = ?";
     private static final String QUERY_INSERT_NEW_TAGS_TO_CERTIFICATE = "insert into gift_certificates_tags(gift_certificate_id, tag_id) values (?, ?);";
+    private static final String REMOVE_TAGS_ASSOCIATION_QUERY = "DELETE FROM gift_certificates_tags WHERE gift_certificate_id=?";
 
 
     private final JdbcTemplate jdbcTemplate;
@@ -108,9 +109,15 @@ public class GiftCertificateDaoImpl implements GiftCertificateDAO {
     }
 
     @Override
+    @Transactional
     public void removeById(long id) throws DaoException {
         try {
-            jdbcTemplate.update(QUERY_DELETE_GC_BY_ID, id);
+            if (getById(id) != null) {
+                jdbcTemplate.update(REMOVE_TAGS_ASSOCIATION_QUERY, id);
+                jdbcTemplate.update(QUERY_DELETE_GC_BY_ID, id);
+            } else {
+                throw new DaoException(NO_ENTITY_WITH_ID);
+            }
         } catch (DataAccessException e) {
             throw new DaoException(SAVING_ERROR);
         }

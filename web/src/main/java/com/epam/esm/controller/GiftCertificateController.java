@@ -31,6 +31,13 @@ public class GiftCertificateController {
         return giftCertificateService.getById(id);
     }
 
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable("id") long id) throws IncorrectParameterException, DaoException {
+        giftCertificateService.removeById(id);
+        return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+    }
+
     @PostMapping
     public ResponseEntity<String> createCertificate(@RequestBody GiftCertificate certificate) throws DaoException, IncorrectParameterException {
         giftCertificateService.insert(certificate);
