@@ -35,15 +35,9 @@ public class GiftCertificateQueryCreatorImpl
                     .findFirst()
                     .orElse("");
             switch (filterParam) {
-                case FilterParameter.NAME: {
-                    predicates.add(addLikePredicate(criteriaBuilder, root.get(NAME_FIELD), paramValue));
-                    break;
-                }
-                case FilterParameter.DESCRIPTION: {
-                    predicates.add(addLikePredicate(criteriaBuilder, root.get(FilterParameter.DESCRIPTION), paramValue));
-                    break;
-                }
-                case FilterParameter.TAG_NAME: {
+                case FilterParameter.NAME -> predicates.add(addLikePredicate(criteriaBuilder, root.get(NAME_FIELD), paramValue));
+                case FilterParameter.DESCRIPTION -> predicates.add(addLikePredicate(criteriaBuilder, root.get(FilterParameter.DESCRIPTION), paramValue));
+                case FilterParameter.TAG_NAME -> {
                     List<String> tagNames = entry.getValue();
                     tagNames.forEach(
                             (tagName) -> predicates.add(
@@ -53,16 +47,9 @@ public class GiftCertificateQueryCreatorImpl
                                     )
                             )
                     );
-                    break;
                 }
-                case FilterParameter.NAME_SORT: {
-                    orders.add(addOrder(criteriaBuilder, root.get(NAME_FIELD), paramValue));
-                    break;
-                }
-                case FilterParameter.DATE_SORT:   {
-                    orders.add(addOrder(criteriaBuilder, root.get(CREATE_DATE_FIELD), paramValue));
-                    break;
-                }
+                case FilterParameter.NAME_SORT -> orders.add(addOrder(criteriaBuilder, root.get(NAME_FIELD), paramValue));
+                case FilterParameter.DATE_SORT -> orders.add(addOrder(criteriaBuilder, root.get(CREATE_DATE_FIELD), paramValue));
             }
         }
         criteriaQuery.select(root)

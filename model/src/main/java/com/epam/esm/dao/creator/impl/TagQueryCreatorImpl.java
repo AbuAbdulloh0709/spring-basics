@@ -30,14 +30,8 @@ public class TagQueryCreatorImpl extends AbstractQueryCreator implements QueryCr
                     .findFirst()
                     .orElse("");
             switch (filterParam) {
-                case FilterParameter.TAG_NAME: {
-                    predicates.add(addLikePredicate(criteriaBuilder, root.get(NAME_FIELD), paramValue));
-                    break;
-                }
-                case FilterParameter.SORT_BY_TAG_NAME: {
-                    orders.add(addOrder(criteriaBuilder, root.get(NAME_FIELD), paramValue));
-                    break;
-                }
+                case FilterParameter.TAG_NAME -> predicates.add(addLikePredicate(criteriaBuilder, root.get(NAME_FIELD), paramValue));
+                case FilterParameter.SORT_BY_TAG_NAME -> orders.add(addOrder(criteriaBuilder, root.get(NAME_FIELD), paramValue));
             }
         }
         criteriaQuery.select(root)

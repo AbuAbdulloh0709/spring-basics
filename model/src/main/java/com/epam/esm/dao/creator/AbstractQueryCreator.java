@@ -17,14 +17,8 @@ public abstract class AbstractQueryCreator {
                              String sortType) {
         Order order = null;
         switch (sortType.toLowerCase()) {
-            case "asc": {
-                order = criteriaBuilder.asc(expression);
-                break;
-            }
-            case "desc": {
-                order = criteriaBuilder.desc(expression);
-                break;
-            }
+            case "asc" -> order = criteriaBuilder.asc(expression);
+            case "desc" -> order = criteriaBuilder.desc(expression);
         }
         return order;
     }
