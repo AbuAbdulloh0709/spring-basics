@@ -1,9 +1,20 @@
 package com.epam.esm.entity;
 
+import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
+import org.springframework.hateoas.RepresentationModel;
+
 import java.util.Objects;
 
-public class Tag {
+@Entity
+@Table(name = "tags")
+@Audited
+public class Tag extends RepresentationModel<Tag> {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "name")
     private String name;
 
     public Tag() {
@@ -39,14 +50,14 @@ public class Tag {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Tag tag = (Tag) o;
-        return id == tag.id
-                && Objects.equals(name, tag.name);
+        return id == tag.id && Objects.equals(name, tag.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(super.hashCode(), id, name);
     }
 
     @Override

@@ -31,7 +31,7 @@ public class GiftCertificateFieldExtractor {
         if (certificate.getDuration() != 0) {
             fields.put("duration", String.valueOf(certificate.getDuration()));
         }
-        fields.put("last_update_date", certificate.getLastUpdateDate());
+//        fields.put("last_update_date", certificate.getLastUpdateDate());
 
         return fields;
     }

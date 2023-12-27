@@ -1,23 +1,45 @@
 package com.epam.esm.entity;
 
+import jakarta.persistence.*;
+import org.hibernate.envers.Audited;
+
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "gift_certificates")
+@Audited
 public class GiftCertificate {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+
+    @Column(name = "name")
     private String name;
+    @Column(name = "description")
     private String description;
+    @Column(name = "price")
     private BigDecimal price;
+    @Column(name = "duration")
     private int duration;
-    private String createDate;
-    private String lastUpdateDate;
+    @Column(name = "create_date")
+    private LocalDateTime createDate;
+    @Column(name = "last_update_date")
+    private LocalDateTime lastUpdateDate;
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinTable(
+            name = "gift_certificates_tags",
+            joinColumns = @JoinColumn(name = "gift_certificate_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
     private List<Tag> tags;
 
     public GiftCertificate() {
     }
 
-    public GiftCertificate(long id, String name, String description, BigDecimal price, int duration, String createDate, String lastUpdateDate, List<Tag> tags) {
+    public GiftCertificate(long id, String name, String description, BigDecimal price, int duration, LocalDateTime createDate, LocalDateTime lastUpdateDate, List<Tag> tags) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -68,19 +90,19 @@ public class GiftCertificate {
         this.duration = duration;
     }
 
-    public String getCreateDate() {
+    public LocalDateTime getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(String createDate) {
+    public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
 
-    public String getLastUpdateDate() {
+    public LocalDateTime getLastUpdateDate() {
         return lastUpdateDate;
     }
 
-    public void setLastUpdateDate(String lastUpdateDate) {
+    public void setLastUpdateDate(LocalDateTime lastUpdateDate) {
         this.lastUpdateDate = lastUpdateDate;
     }
 

@@ -1,91 +1,68 @@
 package com.epam.esm.dao.impl;
 
-import com.epam.esm.dao.TagDAO;
-import com.epam.esm.dao.mapper.TagMapper;
+import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.DaoException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static com.epam.esm.exception.ExceptionDaoMessageCodes.*;
+import java.util.Optional;
 
 @Repository
-public class TagDaoImpl implements TagDAO {
+@Transactional
+public class TagDaoImpl implements TagDao {
 
-    private final String QUERY_CREATE_TAG = "insert into tags (tag_name) values(?)";
-    private final String QUERY_GET_TAG = "select * from tags where id = ?;";
-    private final String QUERY_GET_TAG_ALL = "select * from tags;";
-    private final String QUERY_GET_BY_NAME = "select * from tags where tag_name = ?";
-    private final String QUERY_DELETE_BY_ID = "delete from tags where id = ?";
+    private static final String QUERY_GET_TAG_ALL = "select t from Tag as t";
+    private static final String QUERY_GET_BY_NAME = "select t from Tag as t where t.name = :name";
+    private static final String QUERY_SELECT_MOST_POPULAR_TAG = "select t from Order o " +
+            "join o.giftCertificate c " +
+            "join c.tags t " +
+            "group by t.id order by count(t.id) desc, sum(o.price) desc";
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
 
-    private final JdbcTemplate jdbcTemplate;
-    private final TagMapper tagMapper;
-
-    @Autowired
-    public TagDaoImpl(JdbcTemplate jdbcTemplate, TagMapper tagMapper) {
-        this.jdbcTemplate = jdbcTemplate;
-        this.tagMapper = tagMapper;
+    @Override
+    public Tag insert(Tag tag) {
+        entityManager.persist(tag);
+        return tag;
     }
 
     @Override
-    public void insert(Tag tag) throws DaoException {
-        try {
-            jdbcTemplate.update(QUERY_CREATE_TAG, tag.getName());
-        } catch (DataAccessException e) {
-            System.out.println(e.getLocalizedMessage());
-            throw new DaoException(SAVING_ERROR);
-        }
+    public Optional<Tag> getById(long id) {
+        return Optional.ofNullable(entityManager.find(Tag.class, id));
     }
 
     @Override
-    public Tag getById(long id) throws DaoException {
-        List<Tag> tags = jdbcTemplate.query(QUERY_GET_TAG, tagMapper, id);
-        if (tags.size() != 0) {
-            return tags.get(0);
-        } else {
-            throw new DaoException(NO_ENTITY_WITH_ID);
-        }
+    public List<Tag> getAll(Pageable pageable) {
+        return entityManager.createQuery(QUERY_GET_TAG_ALL, Tag.class)
+                .setFirstResult((int) pageable.getOffset())
+                .setMaxResults(pageable.getPageSize())
+                .getResultList();
     }
 
     @Override
-    public List<Tag> getAll() throws DaoException {
-        try {
-            return jdbcTemplate.query(QUERY_GET_TAG_ALL, tagMapper);
-        } catch (DataAccessException e) {
-            throw new DaoException(NO_ENTITY);
-        }
+    public void removeById(long id) {
+        Tag tag = entityManager.find(Tag.class, id);
+        entityManager.remove(tag);
     }
 
     @Override
-    public void removeById(long id) throws DaoException {
-        try {
-            if (getById(id)==null){
-                throw new DaoException(NO_ENTITY_WITH_ID);
-            } else {
-                jdbcTemplate.update(QUERY_DELETE_BY_ID, id);
-            }
-        } catch (DataAccessException e) {
-            throw new DaoException(SAVING_ERROR);
-        }
+    public Optional<Tag> getByName(String name) {
+        return entityManager.createQuery(QUERY_GET_BY_NAME, Tag.class)
+                .setParameter("name", name)
+                .getResultList().stream()
+                .findFirst();
     }
 
     @Override
-    public Tag getByName(String name) throws DaoException {
-        try {
-            List<Tag> list = jdbcTemplate.query(QUERY_GET_BY_NAME, tagMapper, name);
-            if (list == null || list.isEmpty()) {
-                throw new DaoException(NO_ENTITY_WITH_NAME);
-            } else {
-                return list.get(0);
-            }
-
-        } catch (DataAccessException e) {
-            throw new DaoException(NO_ENTITY_WITH_NAME);
-        }
+    public Optional<Tag> getMostPopularTagWithHighestCostOfAllOrders() {
+        return entityManager.createQuery(QUERY_SELECT_MOST_POPULAR_TAG, Tag.class)
+                .getResultStream()
+                .findFirst();
     }
 }
