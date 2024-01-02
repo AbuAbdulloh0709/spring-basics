@@ -5,7 +5,6 @@ import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exceptions.*;
-import com.epam.esm.handler.DateHandler;
 import com.epam.esm.service.GiftCertificateService;
 import com.epam.esm.validator.GiftCertificateValidator;
 import com.epam.esm.validator.IdentifiableValidator;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,12 +28,10 @@ import static com.epam.esm.exceptions.ExceptionMessageKey.GIFT_CERTIFICATE_NOT_F
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDao giftCertificateDao;
     private final TagDao tagDao;
-    private final DateHandler dateHandler;
 
-    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagDao tagDao, DateHandler dateHandler) {
+    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagDao tagDao) {
         this.giftCertificateDao = giftCertificateDao;
         this.tagDao = tagDao;
-        this.dateHandler = dateHandler;
     }
 
     @Override
@@ -49,8 +47,8 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (isGiftCertificateExist) {
             throw new DuplicateEntityException(ExceptionMessageKey.GIFT_CERTIFICATE_EXIST);
         }
-        giftCertificate.setCreateDate(dateHandler.getCurrentDate());
-        giftCertificate.setLastUpdateDate(dateHandler.getCurrentDate());
+        giftCertificate.setCreateDate(LocalDateTime.now());
+        giftCertificate.setLastUpdateDate(LocalDateTime.now());
         removeDuplicateTags(giftCertificate);
         giftCertificate.setTags(updateListFromDatabase(giftCertificate.getTags()));
         return giftCertificateDao.insert(giftCertificate);
@@ -196,11 +194,11 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         }
 
         List<Tag> tags = newGiftCertificate.getTags();
-        if (!Objects.isNull(tags)) {
+        if (!tags.isEmpty()) {
             oldGiftCertificate.setTags(tags);
         }
 
-//        oldGiftCertificate.setLastUpdateDate(dateHandler.getCurrentDate());
+        oldGiftCertificate.setLastUpdateDate(LocalDateTime.now());
         return oldGiftCertificate;
     }
 

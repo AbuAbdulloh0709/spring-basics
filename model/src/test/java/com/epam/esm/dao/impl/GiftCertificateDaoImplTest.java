@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.util.LinkedMultiValueMap;
@@ -31,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @TestPropertySource("classpath:application-test.properties")
 @ActiveProfiles("test")
 @Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class GiftCertificateDaoImplTest {
     private static final long NOT_EXISTED_ID = 999L;
     private static final String NOT_EXISTED_NAME = "not existed name";

@@ -1,5 +1,9 @@
 package com.epam.esm.exceptions;
 
+/**
+ * {@code ExceptionMessageKey} is a class that has exception message keys.
+ */
+
 public final class ExceptionMessageKey {
     public static final String BAD_ID = "identifiable.badID";
     public static final String ID_EXISTENCE = "identifiable.hasId";

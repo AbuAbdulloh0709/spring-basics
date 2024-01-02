@@ -3,12 +3,14 @@ package com.epam.esm.dao.impl;
 import com.epam.esm.config.DaoConfigTest;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.entity.User;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
@@ -23,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @TestPropertySource("classpath:application-test.properties")
 @ActiveProfiles("test")
 @Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class TagDaoImplTest {
     private static final long NOT_EXISTED_ID = 999L;
     private final Tag TAG_1 = new Tag(1, "tagName1");
@@ -30,11 +33,8 @@ public class TagDaoImplTest {
     private final Tag TAG_3 = new Tag(3, "tagName5");
     private final Tag TAG_4 = new Tag(4, "tagName4");
     private final Tag TAG_5 = new Tag(5, "tagName2");
-    private static final String PART_OF_TAG_NAME = "tagName";
+    private final User USER = new User(1, "name1");
     private static final String NOT_EXISTED_NAME = "not existed name";
-    private static final String INCORRECT_FILTER_PARAM = "incorrectParameter";
-    private static final String INCORRECT_FILTER_PARAM_VALUE = "incorrectParameterValue";
-    private static final String ASCENDING = "ASC";
     private final Pageable pageRequest = PageRequest.of(0, 5);
 
     @Autowired
@@ -75,8 +75,8 @@ public class TagDaoImplTest {
 
     @Test
     void getMostPopularTagWithHighestCostOfAllOrders() {
-        Optional<Tag> expected = Optional.of(TAG_2);
-        Optional<Tag> actual = tagDao.getMostPopularTagWithHighestCostOfAllOrders();
+        List<Tag> expected = List.of(TAG_2,TAG_4);
+        List<Tag> actual = tagDao.getMostPopularTagsWithHighestCostOfAllOrders(USER.getId());
         assertEquals(expected, actual);
     }
 }

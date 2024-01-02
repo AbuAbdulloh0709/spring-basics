@@ -6,6 +6,7 @@ import com.epam.esm.entity.Tag;
 import com.epam.esm.hateoas.impl.TagHateoasAdder;
 import com.epam.esm.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -66,11 +67,9 @@ public class TagController {
 
     @GetMapping("/popular")
     @ResponseStatus(HttpStatus.OK)
-    public TagDto mostPopularTagOfUserWithHighestCostOfAllOrders() {
-        Tag tag = tagService.getMostPopularTagOfUserWithHighestCostOfAllOrders();
+    public List<TagDto> mostPopularTagOfUserWithHighestCostOfAllOrders(@Param("user_id") long user_id) {
+        List<Tag> tags = tagService.getMostPopularTagsOfUserWithHighestCostOfAllOrders(user_id);
 
-        TagDto tagDto = mapper.mapToDto(tag);
-        hateoasAdder.addLinks(tagDto);
-        return tagDto;
+        return tags.stream().map(mapper::mapToDto).peek(hateoasAdder::addLinks).collect(Collectors.toList());
     }
 }

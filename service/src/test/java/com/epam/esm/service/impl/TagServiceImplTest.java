@@ -80,10 +80,9 @@ class TagServiceImplTest {
 
     @Test
     public void testGetMostPopularTagOfUserWithHighestCostOfAllOrders() {
-        when(tagDao.getMostPopularTagWithHighestCostOfAllOrders()).thenReturn(Optional.of(TAG_1));
-        Tag actual = tagService.getMostPopularTagOfUserWithHighestCostOfAllOrders();
-        Tag expected = TAG_1;
+        when(tagDao.getMostPopularTagsWithHighestCostOfAllOrders(USER_1.getId())).thenReturn(List.of(TAG_1));
+        List<Tag> actual = tagService.getMostPopularTagsOfUserWithHighestCostOfAllOrders(USER_1.getId());
 
-        assertEquals(expected, actual);
+        assertEquals(List.of(TAG_1), actual);
     }
 }

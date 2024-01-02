@@ -9,7 +9,6 @@ import com.epam.esm.entity.User;
 import com.epam.esm.exceptions.ExceptionResult;
 import com.epam.esm.exceptions.IncorrectParameterException;
 import com.epam.esm.exceptions.NoSuchEntityException;
-import com.epam.esm.handler.DateHandler;
 import com.epam.esm.service.OrderService;
 import com.epam.esm.validator.IdentifiableValidator;
 import com.epam.esm.validator.OrderValidator;
@@ -17,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,13 +25,11 @@ import static com.epam.esm.exceptions.ExceptionMessageKey.*;
 @Repository
 public class OrderServiceImpl implements OrderService {
 
-    private final DateHandler dateHandler;
     private final OrderDao orderDao;
     private final UserDao userDao;
     private final GiftCertificateDao giftCertificateDao;
 
-    public OrderServiceImpl(DateHandler dateHandler, OrderDao orderDao, UserDao userDao, GiftCertificateDao giftCertificateDao) {
-        this.dateHandler = dateHandler;
+    public OrderServiceImpl(OrderDao orderDao, UserDao userDao, GiftCertificateDao giftCertificateDao) {
         this.orderDao = orderDao;
         this.userDao = userDao;
         this.giftCertificateDao = giftCertificateDao;
@@ -59,7 +57,7 @@ public class OrderServiceImpl implements OrderService {
         order.setGiftCertificate(optionalGiftCertificate.get());
 
         order.setPrice(optionalGiftCertificate.get().getPrice());
-        order.setPurchaseTime(dateHandler.getCurrentDate());
+        order.setPurchaseTime(LocalDateTime.now());
         return orderDao.insert(order);
     }
 
@@ -86,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void removeById(long id) {
-
+        throw new UnsupportedOperationException();
     }
 
     @Override

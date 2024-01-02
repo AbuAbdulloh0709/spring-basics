@@ -1,5 +1,12 @@
 package com.epam.esm.exceptions;
 
+
+/**
+ * {@code DuplicateEntityException} is used when entity already exists in  database.
+ *
+ * @see RuntimeException
+ */
+
 public class DuplicateEntityException extends RuntimeException {
     public DuplicateEntityException() {
     }

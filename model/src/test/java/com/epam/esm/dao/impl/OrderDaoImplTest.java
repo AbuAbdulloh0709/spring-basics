@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
@@ -27,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @TestPropertySource("classpath:application-test.properties")
 @ActiveProfiles("test")
 @Transactional
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class OrderDaoImplTest {
     private static final long NOT_EXISTED_ID = 999L;
     private final Pageable pageRequest = PageRequest.of(0, 5);

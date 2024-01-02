@@ -1,5 +1,10 @@
 package com.epam.esm.exceptions;
 
+/**
+ * {@code NoSuchEntityException} is used when entity not found in database.
+ *
+ */
+
 public class NoSuchEntityException extends RuntimeException {
     public NoSuchEntityException() {
     }

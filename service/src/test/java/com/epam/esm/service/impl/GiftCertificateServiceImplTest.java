@@ -3,7 +3,6 @@ package com.epam.esm.service.impl;
 import com.epam.esm.dao.impl.GiftCertificateDaoImpl;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.handler.DateHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,8 +32,6 @@ class GiftCertificateServiceImplTest {
     @Mock
     private GiftCertificateDaoImpl giftCertificateDao = Mockito.mock(GiftCertificateDaoImpl.class);
 
-    @Mock
-    private DateHandler dateHandler = Mockito.mock(DateHandler.class);
     private static final LocalDateTime UPDATED_DATE = LocalDateTime.parse("2023-08-29T06:12:15.156");
 
     @InjectMocks
@@ -90,7 +87,6 @@ class GiftCertificateServiceImplTest {
         insertableGiftCertificate.setDuration(GIFT_CERTIFICATE_3.getDuration());
         insertableGiftCertificate.setPrice(GIFT_CERTIFICATE_3.getPrice());
 
-        when(dateHandler.getCurrentDate()).thenReturn(UPDATED_DATE);
         doReturn(GIFT_CERTIFICATE_3).when(giftCertificateDao).insert(any());
 
         GiftCertificate actual = giftCertificateService.insert(insertableGiftCertificate);
