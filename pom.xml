@@ -50,9 +50,9 @@
         </dependency>
 
         <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-test</artifactId>
-        <scope>test</scope>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
@@ -88,7 +88,11 @@
                             <goal>check</goal>
                         </goals>
                         <configuration>
-
+                            <includes>
+                                <include>com.epam.esm.service</include>
+                                <include>com.epam.esm.dao</include>
+                                <include>com.epam.esm.validator</include>
+                            </includes>
                         </configuration>
                     </execution>
                 </executions>
