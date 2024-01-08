@@ -1,0 +1,75 @@
+The query given below serves to retrieve the most widely used tag of a user with the highest cost of all orders.
+
+WITH OrderedTags AS (
+    SELECT t.id,
+           t.name,
+           count(t.id)                                                AS count,
+           sum(o.price)                                               AS total_price,
+           RANK() OVER (ORDER BY count(t.id) DESC, sum(o.price) DESC) AS tag_rank
+    FROM (select * from orders where user_id = ?) o
+             JOIN gift_certificates gc ON o.gift_certificate_id = gc.id
+             JOIN gift_certificates_tags gct ON gc.id = gct.gift_certificate_id
+             JOIN tags t ON t.id = gct.tag_id
+    GROUP BY t.id
+)
+SELECT id,
+       name,
+       count,
+       total_price,
+       tag_rank
+FROM OrderedTags
+WHERE tag_rank = 1;
+
+Here's an explanation of the provided query plan:
+
+Subquery Scan on orderedtags  (cost=606.28..606.67 rows=1 width=69) (actual time=0.998..1.015 rows=0 loops=1)
+  Filter: (orderedtags.tag_rank = 1)
+  ->  WindowAgg  (cost=606.28..606.52 rows=12 width=69) (actual time=0.996..1.008 rows=0 loops=1)
+        ->  Sort  (cost=606.28..606.31 rows=12 width=61) (actual time=0.992..1.003 rows=0 loops=1)
+"              Sort Key: (count(t.id)) DESC, (sum(orders.price)) DESC"
+              Sort Method: quicksort  Memory: 25kB
+              ->  GroupAggregate  (cost=605.79..606.06 rows=12 width=61) (actual time=0.912..0.921 rows=0 loops=1)
+                    Group Key: t.id
+                    ->  Sort  (cost=605.79..605.82 rows=12 width=51) (actual time=0.911..0.920 rows=0 loops=1)
+                          Sort Key: t.id
+                          Sort Method: quicksort  Memory: 25kB
+                          ->  Nested Loop  (cost=21.86..605.58 rows=12 width=51) (actual time=0.898..0.907 rows=0 loops=1)
+                                ->  Nested Loop  (cost=21.59..602.02 rows=12 width=38) (actual time=0.898..0.906 rows=0 loops=1)
+                                      Join Filter: (orders.gift_certificate_id = gc.id)
+                                      ->  Hash Join  (cost=21.30..598.18 rows=12 width=54) (actual time=0.897..0.905 rows=0 loops=1)
+                                            Hash Cond: (gct.gift_certificate_id = orders.gift_certificate_id)
+                                            ->  Seq Scan on gift_certificates_tags gct  (cost=0.00..463.92 rows=30092 width=16) (actual time=0.384..0.385 rows=1 loops=1)
+                                            ->  Hash  (cost=21.25..21.25 rows=4 width=38) (actual time=0.487..0.491 rows=0 loops=1)
+                                                  Buckets: 1024  Batches: 1  Memory Usage: 8kB
+                                                  ->  Seq Scan on orders  (cost=0.00..21.25 rows=4 width=38) (actual time=0.486..0.487 rows=0 loops=1)
+                                                        Filter: (user_id = 1047)
+                                                        Rows Removed by Filter: 21
+                                      ->  Index Only Scan using gift_certificates_pkey on gift_certificates gc  (cost=0.29..0.31 rows=1 width=8) (never executed)
+                                            Index Cond: (id = gct.gift_certificate_id)
+                                            Heap Fetches: 0
+                                ->  Index Scan using tags_pkey on tags t  (cost=0.28..0.30 rows=1 width=21) (never executed)
+                                      Index Cond: (id = gct.tag_id)
+Planning Time: 0.704 ms
+Execution Time: 1.085 ms
+
+
+Let's take a closer look to the plan and break down it.
+
+1. Subquery Scan on orderedtags: it filters the result based on 'orderedtags.tag_rank = 1'
+2. WindowAgg: This operation is responsible for performing window functions. In this case, it's likely used for calculating the RANK() over the specified ordering criteria.
+3. Sort: quicksort is used in this case with relatively small amount of data (25kb)
+4. GroupAggregate: In this step, grouping the data bt the tag_id to count and sum for each group.
+5. Inner Sort: After that, the data is sorted by groped tag ID. it also uses the same sort algorithm. Memory usage 25kb.
+6. Nested loops and Hash Join. Two nested loops are performing to join "gift_certificates" with "gift_certificates_tags" with "orders". They use hashtable to perform the join.
+7. Seq Scan on orders: Sequential scan on the "orders" table with the filter a given user_id. Rows Removed by Filter indicates that some rows were filtered out based on the condition.
+8. Indexes: This operation involves an index-only scan on the "gift_certificates" and "tags" tables using the primary key index.
+9. Planning Time: 0.704 ms.
+10. Execution Time: 1.085 ms.
+
+
+
+
+
+
+
+

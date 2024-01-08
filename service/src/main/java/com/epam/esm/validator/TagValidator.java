@@ -1,9 +1,9 @@
 package com.epam.esm.validator;
 
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exceptions.IncorrectParameterException;
+import com.epam.esm.exceptions.ExceptionResult;
 
-import static com.epam.esm.exceptions.ExceptionIncorrectParameterMessageCodes.BAD_TAG_NAME;
+import static com.epam.esm.exceptions.ExceptionMessageKey.BAD_TAG_NAME;
 
 public final class TagValidator {
     private static final int MAX_LENGTH_NAME = 20;
@@ -12,13 +12,14 @@ public final class TagValidator {
     private TagValidator() {
     }
 
-    public static void validate(Tag tag) throws IncorrectParameterException {
-        validateName(tag.getName());
+    public static void validate(Tag tag, ExceptionResult er) {
+        IdentifiableValidator.validateExistenceOfId(tag.getId(), er);
+        validateName(tag.getName(), er);
     }
 
-    public static void validateName(String name) throws IncorrectParameterException {
-        if (name.length() < MIN_LENGTH_NAME || name.length() > MAX_LENGTH_NAME) {
-            throw new IncorrectParameterException(BAD_TAG_NAME);
+    public static void validateName(String name, ExceptionResult er) {
+        if (name == null || name.length() < MIN_LENGTH_NAME || name.length() > MAX_LENGTH_NAME) {
+            er.addException(BAD_TAG_NAME, name);
         }
     }
 }

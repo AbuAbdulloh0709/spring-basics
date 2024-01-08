@@ -1,18 +1,18 @@
 package com.epam.esm.exceptions;
 
-public class IncorrectParameterException extends Exception {
-    public IncorrectParameterException() {
+/**
+ * {@code IncorrectParameterException} is used when received parameters have unacceptable value.
+ *
+ */
+
+public class IncorrectParameterException extends RuntimeException {
+    private final ExceptionResult exceptionResult;
+
+    public IncorrectParameterException(ExceptionResult exceptionResult) {
+        this.exceptionResult = exceptionResult;
     }
 
-    public IncorrectParameterException(String messageCode) {
-        super(messageCode);
-    }
-
-    public IncorrectParameterException(String messageCode, Throwable cause) {
-        super(messageCode, cause);
-    }
-
-    public IncorrectParameterException(Throwable cause) {
-        super(cause);
+    public ExceptionResult getExceptionResult() {
+        return exceptionResult;
     }
 }

@@ -1,12 +1,12 @@
 package com.epam.esm.service.validator;
 
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exceptions.IncorrectParameterException;
+import com.epam.esm.exceptions.ExceptionResult;
 import com.epam.esm.validator.TagValidator;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class TagValidatorTest {
     private static final String INCORRECT_NAME = "qw";
@@ -16,21 +16,29 @@ class TagValidatorTest {
 
     @Test
     void testValidate_incorrectData() {
-        assertThrows(IncorrectParameterException.class, () -> TagValidator.validate(INCORRECT_TAG));
+        ExceptionResult exceptionResult = new ExceptionResult();
+        TagValidator.validate(INCORRECT_TAG, exceptionResult);
+        assertFalse(exceptionResult.getExceptionMessages().isEmpty());
     }
 
     @Test
     void testValidate_correctData() {
-        assertDoesNotThrow(() -> TagValidator.validate(CORRECT_TAG));
+        ExceptionResult exceptionResult = new ExceptionResult();
+        TagValidator.validate(CORRECT_TAG, exceptionResult);
+        assertTrue(exceptionResult.getExceptionMessages().isEmpty());
     }
 
     @Test
     void testValidateName_incorrectData() {
-        assertThrows(IncorrectParameterException.class, () -> TagValidator.validateName(INCORRECT_NAME));
+        ExceptionResult exceptionResult = new ExceptionResult();
+        TagValidator.validateName(INCORRECT_NAME, exceptionResult);
+        assertFalse(exceptionResult.getExceptionMessages().isEmpty());
     }
 
     @Test
     void testValidateName_correctData() {
-        assertDoesNotThrow(() -> TagValidator.validateName(CORRECT_NAME));
+        ExceptionResult exceptionResult = new ExceptionResult();
+        TagValidator.validateName(CORRECT_NAME, exceptionResult);
+        assertTrue(exceptionResult.getExceptionMessages().isEmpty());
     }
 }
