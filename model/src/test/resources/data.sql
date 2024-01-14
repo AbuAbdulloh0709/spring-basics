@@ -30,12 +30,11 @@ VALUES (3, 2);
 INSERT INTO gift_certificates_tags (gift_certificate_id, tag_id)
 VALUES (2, 4);
 
+INSERT INTO users(email, password, role, name)
+VALUES ('email1@email.com','$2a$10$zFdd9cCOS/A6./WuG7etC.Mhn3M.R4u2VFMVlz4cVSiNK6bLaT7S.', 'ADMIN', 'name1');
 
-INSERT INTO "users" (name)
-VALUES ('name1');
-
-INSERT INTO "users" (name)
-VALUES ('name2');
+INSERT INTO users(email, password, role, name)
+VALUES ('email2@email.com','$2a$10$gwocSNWrBeUOO.0.0./iveTo/uDatwYEWHadx1xMUZ.Do93yS9kc2', 'USER', 'name2');
 
 
 INSERT INTO "orders" (price, purchase_time, user_id, gift_certificate_id)

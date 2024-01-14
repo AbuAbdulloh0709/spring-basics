@@ -1,19 +1,21 @@
 package com.epam.esm.exceptions;
 
-public class ErrorResponse {
-    private String errorCode;
-    private String errorMessage;
+import java.util.List;
 
-    public ErrorResponse(String errorCode, String errorMessage) {
+public class ErrorResponse {
+    private final String errorCode;
+    private final List<String> errorMessages;
+
+    public ErrorResponse(String errorCode, List<String> errorMessages) {
         this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+        this.errorMessages = errorMessages;
     }
 
     public String getErrorCode() {
         return errorCode;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public List<String> getErrorMessages() {
+        return errorMessages;
     }
 }

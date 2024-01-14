@@ -14,13 +14,15 @@ import java.util.Optional;
 public class UserDaoImpl implements UserDao {
 
     private final String QUERY_GET_USER_ALL = "select u from User as u";
+    private static final String QUERY_GET_BY_EMAIL = "select u from User as u where u.email = :email";
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     public User insert(User user) {
-        throw new UnsupportedOperationException();
+        entityManager.persist(user);
+        return user;
     }
 
     @Override
@@ -39,5 +41,13 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void removeById(long id) {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Optional<User> findUserByEmail(String email) {
+        return entityManager.createQuery(QUERY_GET_BY_EMAIL, User.class)
+                .setParameter("email", email)
+                .getResultList().stream()
+                .findFirst();
     }
 }

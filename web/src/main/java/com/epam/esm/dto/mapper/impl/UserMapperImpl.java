@@ -13,6 +13,9 @@ public class UserMapperImpl implements Mapper<User, UserDto> {
 
         user.setId(dto.getId());
         user.setName(dto.getName());
+        user.setEmail(dto.getEmail());
+        user.setPassword(dto.getPassword());
+        user.setRole(dto.getRole());
 
         return user;
     }
@@ -23,6 +26,9 @@ public class UserMapperImpl implements Mapper<User, UserDto> {
 
         userDto.setId(entity.getId());
         userDto.setName(entity.getName());
+        userDto.setEmail(entity.getEmail());
+        userDto.setPassword(entity.getPassword());
+        userDto.setRole(entity.getRole());
 
         return userDto;
     }

@@ -17,6 +17,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static com.epam.esm.entity.Role.ADMIN;
+import static com.epam.esm.entity.Role.USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -27,8 +29,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class UserDaoImplTest {
     private static final long NOT_EXISTED_ID = 999L;
-    private final User USER_1 = new User(1, "name1");
-    private final User USER_2 = new User(2, "name2");
+    private static final User USER_1 = new User(1, "name1", "email1@email.com",
+            "$2a$10$zFdd9cCOS/A6./WuG7etC.Mhn3M.R4u2VFMVlz4cVSiNK6bLaT7S.", ADMIN);
+    private static final User USER_2 = new User(2, "name2", "email2@email.com",
+            "$2a$10$gwocSNWrBeUOO.0.0./iveTo/uDatwYEWHadx1xMUZ.Do93yS9kc2", USER);
+
     private final Pageable pageRequest = PageRequest.of(0, 5);
 
     @Autowired
