@@ -46,6 +46,14 @@ public class ExceptionsHandler {
         ErrorResponse errorResponse = new ErrorResponse(BAD_REQUEST_EXCEPTION.toString(), details);
         return new ResponseEntity<>(errorResponse, BAD_REQUEST);
     }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public final ResponseEntity<Object> constraintViolationException(ConstraintViolationException ex) {
+        List<String> details = Collections.singletonList(MessageConvertor.toLocale(ex.getLocalizedMessage()));
+        ErrorResponse errorResponse = new ErrorResponse(METHOD_NOT_ALLOWED_EXCEPTION.toString(), details);
+        return new ResponseEntity<>(errorResponse, METHOD_NOT_ALLOWED);
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public final ResponseEntity<Object> handleBadCredentialsException() {
         List<String> details = Collections.singletonList(MessageConvertor.toLocale("exception.invalidAuthorization"));

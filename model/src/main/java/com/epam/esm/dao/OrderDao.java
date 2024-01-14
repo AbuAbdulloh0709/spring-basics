@@ -14,4 +14,12 @@ public interface OrderDao extends BaseDao<Order> {
      * @return List of Entities
      */
     List<Order> getByUserId(long userId, Pageable pageable);
+
+    /**
+     * Method for checking Orders has the GiftCertificate entity by ID.
+     *
+     * @param gcId ID of GiftCertificate entity
+     * @return boolean
+     */
+    boolean ordersHasGiftCertificateByGiftCertificateID(long gcId);
 }
