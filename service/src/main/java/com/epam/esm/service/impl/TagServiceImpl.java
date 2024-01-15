@@ -1,5 +1,6 @@
 package com.epam.esm.service.impl;
 
+import com.epam.esm.dao.GiftCertificateDao;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exceptions.*;
@@ -13,14 +14,17 @@ import java.util.List;
 import java.util.Optional;
 
 import static com.epam.esm.exceptions.ExceptionMessageKey.TAG_NOT_FOUND;
+import static com.epam.esm.exceptions.ExceptionMessageKey.TAG_USED;
 
 @Service
 public class TagServiceImpl implements TagService {
 
     private final TagDao tagDao;
+    private final GiftCertificateDao giftCertificateDao;
 
-    public TagServiceImpl(TagDao tagDao) {
+    public TagServiceImpl(TagDao tagDao, GiftCertificateDao giftCertificateDao) {
         this.tagDao = tagDao;
+        this.giftCertificateDao = giftCertificateDao;
     }
 
     @Override
@@ -71,6 +75,13 @@ public class TagServiceImpl implements TagService {
         if (optionalTag.isEmpty()) {
             throw new NoSuchEntityException(TAG_NOT_FOUND);
         }
+
+        boolean isTagUsed = giftCertificateDao.giftCertificatesHasTagByTagID(id);
+
+        if (isTagUsed){
+            throw new ConstraintViolationException(TAG_USED);
+        }
+
         tagDao.removeById(id);
     }
 

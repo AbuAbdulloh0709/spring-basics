@@ -32,5 +32,13 @@ public interface GiftCertificateDao extends BaseDao<GiftCertificate> {
      */
     List<GiftCertificate> doFilter(MultiValueMap<String, String> fields, Pageable pageable);
 
+    /**
+     * Method for checking Gift Certificates has the Tag entity by ID.
+     *
+     * @param tagId ID of Tag entity
+     * @return boolean
+     */
+    boolean giftCertificatesHasTagByTagID(long tagId);
+
 
 }

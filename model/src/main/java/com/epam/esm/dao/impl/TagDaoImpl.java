@@ -64,7 +64,7 @@ public class TagDaoImpl implements TagDao {
 
     @Override
     public Optional<Tag> getByName(String name) {
-        return entityManager.createQuery(QUERY_GET_BY_NAME, Tag.class)
+        return entityManager.createQuery(QUERY_SELECT_MOST_POPULAR_TAG, Tag.class)
                 .setParameter("name", name)
                 .getResultList().stream()
                 .findFirst();

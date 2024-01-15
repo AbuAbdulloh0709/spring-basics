@@ -14,6 +14,7 @@ public final class ExceptionMessageKey {
     public static final String BAD_TAG_NAME = "tag.badName";
     public static final String TAG_EXIST = "tag.alreadyExist";
     public static final String TAG_NOT_FOUND = "tag.notFound";
+    public static final String TAG_USED = "tag.used";
 
     public static final String BAD_GIFT_CERTIFICATE_NAME = "certificate.badName";
     public static final String BAD_GIFT_CERTIFICATE_DESCRIPTION = "certificate.badDescription";
@@ -21,6 +22,7 @@ public final class ExceptionMessageKey {
     public static final String BAD_GIFT_CERTIFICATE_DURATION = "certificate.badDuration";
     public static final String GIFT_CERTIFICATE_NOT_FOUND = "certificate.notFound";
     public static final String GIFT_CERTIFICATE_EXIST = "certificate.alreadyExist";
+    public static final String GIFT_CERTIFICATE_USED = "certificate.used";
 
     public static final String ORDER_NOT_FOUND = "order.notFound";
 
@@ -28,6 +30,10 @@ public final class ExceptionMessageKey {
     public static final String BAD_GIFT_CERTIFICATE_ID = "order.badGiftCertificateID";
 
     public static final String USER_NOT_FOUND = "user.notFound";
+    public static final String USER_EXIST = "user.alreadyExist";
+    public static final String BAD_USER_NAME = "user.badName";
+    public static final String BAD_USER_EMAIL = "user.badEmail";
+    public static final String BAD_USER_PASSWORD = "user.dadPassword";
 
     public static final String INVALID_PAGINATION = "pagination.invalid";
 }

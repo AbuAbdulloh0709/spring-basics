@@ -1,6 +1,7 @@
 package com.epam.esm.service.impl;
 
 import com.epam.esm.dao.GiftCertificateDao;
+import com.epam.esm.dao.OrderDao;
 import com.epam.esm.dao.TagDao;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
@@ -22,16 +23,18 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static com.epam.esm.dao.creator.FilterParameter.*;
-import static com.epam.esm.exceptions.ExceptionMessageKey.GIFT_CERTIFICATE_NOT_FOUND;
+import static com.epam.esm.exceptions.ExceptionMessageKey.*;
 
 @Service
 public class GiftCertificateServiceImpl implements GiftCertificateService {
     private final GiftCertificateDao giftCertificateDao;
     private final TagDao tagDao;
+    private final OrderDao orderDao;
 
-    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagDao tagDao) {
+    public GiftCertificateServiceImpl(GiftCertificateDao giftCertificateDao, TagDao tagDao, OrderDao orderDao) {
         this.giftCertificateDao = giftCertificateDao;
         this.tagDao = tagDao;
+        this.orderDao = orderDao;
     }
 
     @Override
@@ -116,6 +119,13 @@ public class GiftCertificateServiceImpl implements GiftCertificateService {
         if (giftCertificate.isEmpty()) {
             throw new NoSuchEntityException(GIFT_CERTIFICATE_NOT_FOUND);
         }
+
+        boolean isGiftCertificateUsed = orderDao.ordersHasGiftCertificateByGiftCertificateID(id);
+
+        if (isGiftCertificateUsed){
+            throw new ConstraintViolationException(GIFT_CERTIFICATE_USED);
+        }
+
         giftCertificateDao.removeById(id);
     }
 

@@ -20,7 +20,8 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
 
 
     private static final String QUERY_SELECT_ALL_CERTIFICATES = "select gc from GiftCertificate as gc ";
-    private final String QUERY_GET_GC_BY_NAME = "select gc from GiftCertificate as gc where gc.name =:name";
+    private final String QUERY_GET_GC_BY_NAME = "select gc from GiftCertificate as gc INNER JOIN gc.tags t where t.id =:tag_id";
+    private final String QUERY_GET_GC_BY_TAG_ID = "select gc from GiftCertificate as gc INNER JOIN gc.tags t where t.id =:tag_id";
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -86,4 +87,13 @@ public class GiftCertificateDaoImpl implements GiftCertificateDao {
                 .distinct()
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public boolean giftCertificatesHasTagByTagID(long tagId) {
+        return entityManager.createQuery(QUERY_GET_GC_BY_TAG_ID, GiftCertificate.class)
+                .setParameter("tag_id", tagId)
+                .getResultList().stream()
+                .findFirst().isPresent();
+    }
+
 }

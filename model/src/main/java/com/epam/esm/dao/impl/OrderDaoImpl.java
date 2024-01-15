@@ -15,6 +15,7 @@ public class OrderDaoImpl implements OrderDao {
 
     private static final String QUERY_GET_ORDER_ALL = "select o from Order as o";
     private static final String QUERY_SELECT_BY_USER_ID = "select o from Order o where o.user.id = :userId";
+    private static final String QUERY_SELECT_BY_GC_ID = "select o from Order o where o.giftCertificate.id = :gcId";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -50,5 +51,13 @@ public class OrderDaoImpl implements OrderDao {
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
                 .getResultList();
+    }
+
+    @Override
+    public boolean ordersHasGiftCertificateByGiftCertificateID(long gcId) {
+        return entityManager.createQuery(QUERY_SELECT_BY_GC_ID, Order.class)
+                .setParameter("gcId", gcId)
+                .getResultList().stream()
+                .findFirst().isPresent();
     }
 }
